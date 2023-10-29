@@ -1,5 +1,8 @@
 package com.mobile.lab1.model
 
+import javafx.beans.property.SimpleStringProperty
+import javafx.beans.value.ObservableValue
+
 open class Item(
     var durability: Int,
     var useCount: Int,
@@ -7,6 +10,9 @@ open class Item(
     val description: String,
     val type: ItemType
 ) {
+    val nameProperty = SimpleStringProperty(name)
+
+
     fun Use(): Boolean {
         return if (durability > 0) {
             this.useCount += 1

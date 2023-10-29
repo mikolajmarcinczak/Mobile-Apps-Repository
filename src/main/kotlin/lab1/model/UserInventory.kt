@@ -1,5 +1,7 @@
 package com.mobile.lab1.model
 
+import tornadofx.asObservable
+
 class UserInventory {
   private val items = mutableListOf<Item>()
   private val username = String()
@@ -39,10 +41,12 @@ class UserInventory {
     }
   }
 
-  fun showInventory() {
+  fun showInventory(): List<Item> {
     for ((i, item) in items.withIndex()) {
       println("$i: $item.name")
     }
+
+    return items.asObservable()
   }
 
   private fun notInInventory(item: Item) {
