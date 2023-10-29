@@ -10,17 +10,19 @@ import tornadofx.*
 class UserInventoryView : ViewBase("Player Inventory") {
   private val controller: InventoryController by inject()
 
-  private val selectedItems = SimpleListProperty<Item>()
+  private val items = controller.showInventory()
+  private val selectedItems = SimpleListProperty<Item>(items)
+  private val selectedItemProperty = SimpleObjectProperty<Item>()
 
   override val root = borderpane {
     center {
       tableview(controller.showInventory()) {
         column("Name", Item::nameProperty)
-
-        for (item in selectedItems) {
-          val selectedItemProperty = SimpleObjectProperty<Item>()
-          bindSelected(selectedItemProperty)
-        }
+        column("Description", Item::descProperty)
+        column("Durability", Item::durability)
+        column("Use count", Item::useCount)
+        column("Type", Item::typeProperty)
+        bindSelected(selectedItemProperty)
 
         contextmenu {
           item("Remove") {
@@ -50,12 +52,38 @@ class UserInventoryView : ViewBase("Player Inventory") {
         }
       }
     }
-    bottom {
-      hbox(10) {
-        button("Add Item") {
+    right {
+      vbox(10.0) {
+        button("Dodaj przedmiot") {
           action {
-            val newItem = Item(10, 12, "Nazwa", "Opis", ItemType.Ring)
-            controller.addItem(newItem)
+            val newItem = Item(10, 0, "Ring of Power", "cold stuff", ItemType.Ring)
+            items.add(newItem)
+          }
+        }
+
+        button("Usuń przedmiot") {
+          action {
+            val selectedItem = selectedItemProperty.get()
+            if (selectedItem != null) {
+              items.remove(selectedItem)
+            }
+          }
+        }
+
+        button("Użyj przedmiotu") {
+          action {
+            val selectedItem = selectedItemProperty.get()
+            if (selectedItem != null) {
+              if (!selectedItem.Use()) {
+                items.remove(selectedItem)
+              }
+            }
+          }
+        }
+
+        button("Pokaż szczegóły") {
+          action {
+            selectedItemProperty.get()?.getDetails()
           }
         }
       }

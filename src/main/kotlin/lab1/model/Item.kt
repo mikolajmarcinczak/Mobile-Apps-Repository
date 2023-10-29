@@ -1,7 +1,8 @@
 package com.mobile.lab1.model
 
 import javafx.beans.property.SimpleStringProperty
-import javafx.beans.value.ObservableValue
+import tornadofx.intProperty
+import tornadofx.stringProperty
 
 open class Item(
     var durability: Int,
@@ -11,7 +12,8 @@ open class Item(
     val type: ItemType
 ) {
     val nameProperty = SimpleStringProperty(name)
-
+    val descProperty = stringProperty(description)
+    val typeProperty = SimpleStringProperty(this.type.toString())
 
     fun Use(): Boolean {
         return if (durability > 0) {
