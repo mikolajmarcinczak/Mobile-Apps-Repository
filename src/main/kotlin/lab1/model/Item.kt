@@ -1,5 +1,9 @@
 package com.mobile.lab1.model
 
+import javafx.beans.property.SimpleStringProperty
+import tornadofx.intProperty
+import tornadofx.stringProperty
+
 open class Item(
     var durability: Int,
     var useCount: Int,
@@ -7,6 +11,10 @@ open class Item(
     val description: String,
     val type: ItemType
 ) {
+    val nameProperty = SimpleStringProperty(name)
+    val descProperty = stringProperty(description)
+    val typeProperty = SimpleStringProperty(this.type.toString())
+
     fun Use(): Boolean {
         return if (durability > 0) {
             this.useCount += 1
